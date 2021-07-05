@@ -1,93 +1,27 @@
-import mongoose from 'mongoose'
+// import products from './data/products.js'
+import express from 'express'
 import dotenv from 'dotenv'
-import colors from 'colors'
-import users from './data/users.js'
-import products from './data/products.js'
-import User from './models/userModel.js'
-import Product from './models/productModel.js'
-import Order from './models/orderModel.js'
 import connectDB from './config/db.js'
+import colors from 'colors'
+import productRoutes from './routes/productRoutes.js'
 
 dotenv.config()
 
 connectDB()
 
-const importData = async () => {
-  try {
-    await Order.deleteMany()
-    await Product.deleteMany()
-    await User.deleteMany()
+const app = express()
 
-    const createdUsers = await User.insertMany(users)
+app.get('/', (req, res) => {
+  res.send(`API is running...`)
+})
 
-    const adminUser = createdUsers[0]._id
+app.use('/api/products', productRoutes)
 
-    const sampleProducts = products.map((product) => {
-      return { ...product, user: adminUser }
-    })
+const PORT = process.env.PORT || 5000
 
-    await Product.insertMany(sampleProducts)
-
-    console.log('Data Imported!'.green.inverse)
-    process.exit()
-  } catch (error) {
-    console.error(`${error}`.red.inverse)
-    process.exit(1)
-  }
-}
-
-const destroyData = async () => {
-  try {
-    await Order.deleteMany()
-    await Product.deleteMany()
-    await User.deleteMany()
-
-    console.log('Data Destroyed!'.red.inverse)
-    process.exit()
-  } catch (error) {
-    console.error(`${error}`.red.inverse)
-    process.exit(1)
-  }
-}
-
-if (process.argv[2] === '-d') {
-  destroyData()
-} else {
-  importData()
-}
-
-// import products from './data/products.js'
-// import express from 'express'
-// import dotenv from 'dotenv'
-// import connectDB from './config/db.js'
-// import colors from 'colors'
-
-// dotenv.config()
-
-// connectDB()
-
-// const app = express()
-
-// app.get('/', (req, res) => {
-//   res.send(`API is running...`)
-// })
-
-// app.get('/api/products', (req, res) => {
-//   res.json(products)
-// })
-
-// app.get('/api/products/:id', (req, res) => {
-//   const product = products.find((p) => {
-//     return p._id === req.params.id
-//   })
-//   res.json(product)
-// })
-
-// const PORT = process.env.PORT || 5000
-
-// app.listen(
-//   PORT,
-//   console.log(
-//     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-//   )
-// )
+app.listen(
+  PORT,
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
+)
