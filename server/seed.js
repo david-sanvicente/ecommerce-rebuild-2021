@@ -3,13 +3,12 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import users from './data/users.js'
 import products from './data/products.js'
-import User from './models/userModel.js'
-import Product from './models/productModel.js'
-import Order from './models/orderModel.js'
+import User from './models/Users.js'
+import Product from './models/Products.js'
+import Order from './models/Orders.js'
 import connectDB from './config/db.js'
 
 dotenv.config()
-
 connectDB()
 
 const importData = async () => {
@@ -19,16 +18,14 @@ const importData = async () => {
     await User.deleteMany()
 
     const createdUsers = await User.insertMany(users)
-
     const adminUser = createdUsers[0]._id
-
     const sampleProducts = products.map((product) => {
       return { ...product, user: adminUser }
     })
 
     await Product.insertMany(sampleProducts)
 
-    console.log('Data Imported!'.green.inverse)
+    console.log(`Data Imported`.green.inverse)
     process.exit()
   } catch (error) {
     console.error(`${error}`.red.inverse)
@@ -42,7 +39,7 @@ const destroyData = async () => {
     await Product.deleteMany()
     await User.deleteMany()
 
-    console.log('Data Destroyed!'.red.inverse)
+    console.log(`Data Destroyed`.green.inverse)
     process.exit()
   } catch (error) {
     console.error(`${error}`.red.inverse)
@@ -55,39 +52,3 @@ if (process.argv[2] === '-d') {
 } else {
   importData()
 }
-
-// import products from './data/products.js'
-// import express from 'express'
-// import dotenv from 'dotenv'
-// import connectDB from './config/db.js'
-// import colors from 'colors'
-
-// dotenv.config()
-
-// connectDB()
-
-// const app = express()
-
-// app.get('/', (req, res) => {
-//   res.send(`API is running...`)
-// })
-
-// app.get('/api/products', (req, res) => {
-//   res.json(products)
-// })
-
-// app.get('/api/products/:id', (req, res) => {
-//   const product = products.find((p) => {
-//     return p._id === req.params.id
-//   })
-//   res.json(product)
-// })
-
-// const PORT = process.env.PORT || 5000
-
-// app.listen(
-//   PORT,
-//   console.log(
-//     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-//   )
-// )
