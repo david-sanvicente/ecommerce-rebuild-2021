@@ -8,6 +8,33 @@ import CheckoutSteps from '../components/CheckoutSteps'
 const PlaceOrderScreen = () => {
   const cart = useSelector((state) => state.cart)
 
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  })
+
+  cart.itemsPrice = cart.cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  )
+
+  const cartItems = cart.cartItems.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  )
+  const shippingPrice = cartItems > 500 ? 0 : 25
+  const taxPrice = cartItems * 0.15
+  const totalPrice = cartItems + shippingPrice + taxPrice
+  cart.itemsPrice = formatter.format(cartItems)
+  cart.shippingPrice = formatter.format(shippingPrice)
+  cart.taxPrice = formatter.format(taxPrice)
+  cart.totalPrice = formatter.format(totalPrice)
+
+  const placeOrderHandler = (e) => {
+    console.log('order placed')
+  }
+
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -62,6 +89,49 @@ const PlaceOrderScreen = () => {
               )}
             </ListGroup.Item>
           </ListGroup>
+        </Col>
+        <Col md={4}>
+          <Card>
+            <ListGroup variant='flush'>
+              <ListGroup.Item>
+                <h2>Order Summary</h2>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Items</Col>
+                  <Col>{cart.itemsPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Shipping</Col>
+                  <Col>{cart.shippingPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Tax</Col>
+                  <Col>{cart.taxPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Total</Col>
+                  <Col>{cart.totalPrice}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Button
+                  type='button'
+                  className='btn-block'
+                  disabled={cart.cartItems === 0}
+                  onClick={placeOrderHandler}
+                >
+                  Place order
+                </Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card>
         </Col>
       </Row>
     </>
