@@ -13,7 +13,7 @@ const CartScreen = ({ match, location, history }) => {
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
-  console.log('cart items:', cartItems)
+  // console.log('cart items:', cartItems)
 
   useEffect(() => {
     if (productId) {
