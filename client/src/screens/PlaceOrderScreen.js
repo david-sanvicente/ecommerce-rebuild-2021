@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
+import { createOrder } from '../actions/orderActions'
 
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
+  const dispatch = useDispatch()
+
   const cart = useSelector((state) => state.cart)
 
   const formatter = new Intl.NumberFormat('en-US', {
@@ -14,7 +17,7 @@ const PlaceOrderScreen = () => {
     minimumFractionDigits: 2,
   })
 
-  cart.itemsPrice = cart.cartItems.reduce(
+  const itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   )
@@ -23,16 +26,38 @@ const PlaceOrderScreen = () => {
     (acc, item) => acc + item.price * item.qty,
     0
   )
+
   const shippingPrice = cartItems > 500 ? 0 : 25
   const taxPrice = cartItems * 0.15
   const totalPrice = cartItems + shippingPrice + taxPrice
-  cart.itemsPrice = formatter.format(cartItems)
-  cart.shippingPrice = formatter.format(shippingPrice)
-  cart.taxPrice = formatter.format(taxPrice)
-  cart.totalPrice = formatter.format(totalPrice)
+
+  cart.itemsPrice = Number(itemsPrice.toFixed(2))
+  cart.shippingPrice = Number(shippingPrice.toFixed(2))
+  cart.taxPrice = Number(taxPrice.toFixed(2))
+  cart.totalPrice = Number(totalPrice.toFixed(2))
+
+  const orderCreate = useSelector((state) => state.orderCreate)
+  const { order, success, error } = orderCreate
+
+  useEffect(() => {
+    console.log(cart)
+    if (success) {
+      history.push(`/order/${order._id}`)
+    }
+  }, [history, success])
 
   const placeOrderHandler = (e) => {
-    console.log('order placed')
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        taxPrice: cart.taxPrice,
+        shippingPrice: cart.shippingPrice,
+        totalPrice: cart.totalPrice,
+      })
+    )
   }
 
   return (
@@ -99,27 +124,32 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>{cart.itemsPrice}</Col>
+                  <Col>{formatter.format(cart.itemsPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>{cart.shippingPrice}</Col>
+                  <Col>{formatter.format(cart.shippingPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>{cart.taxPrice}</Col>
+                  <Col>{formatter.format(cart.taxPrice)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>{cart.totalPrice}</Col>
+                  <Col>{formatter.format(cart.totalPrice)}</Col>
                 </Row>
               </ListGroup.Item>
+
+              <ListGroup.Item>
+                {error && <Message variant='danger'>{error}</Message>}
+              </ListGroup.Item>
+
               <ListGroup.Item>
                 <Button
                   type='button'
