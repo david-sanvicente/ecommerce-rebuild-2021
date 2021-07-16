@@ -16,12 +16,12 @@ const OrderScreen = ({ match }) => {
   const dispatch = useDispatch()
   const orderId = match.params.id
   const orderDetails = useSelector((state) => state.orderDetails)
-  // const paymentMethod = useSelector((state) => state.cart.paymentMethod)
   const { order, loading, error } = orderDetails
 
   useEffect(() => {
-    // console.log(orderDetails)
-    dispatch(getOrderDetails(orderId))
+    if (!order || order._id !== orderId) {
+      dispatch(getOrderDetails(orderId))
+    }
   }, [dispatch, orderId])
 
   return loading ? (
@@ -48,6 +48,11 @@ const OrderScreen = ({ match }) => {
                 {order.shippingAddress.postalCode},{' '}
                 {order.shippingAddress.country}
               </p>
+              {order.isDelivered ? (
+                <Message variant='success'>Delivered</Message>
+              ) : (
+                <Message variant='danger'>Not yet delivered</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
