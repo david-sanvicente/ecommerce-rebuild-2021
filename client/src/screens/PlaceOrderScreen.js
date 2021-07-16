@@ -40,7 +40,7 @@ const PlaceOrderScreen = ({ history }) => {
   const { order, success, error } = orderCreate
 
   useEffect(() => {
-    // console.log(cart)
+    console.log(cart.paymentMethod)
     if (success) {
       history.push(`/order/${order._id}`)
     }
@@ -51,11 +51,11 @@ const PlaceOrderScreen = ({ history }) => {
       createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemsPrice,
         taxPrice: cart.taxPrice,
         shippingPrice: cart.shippingPrice,
         totalPrice: cart.totalPrice,
+        paymentMethod: cart.paymentMethod,
       })
     )
   }

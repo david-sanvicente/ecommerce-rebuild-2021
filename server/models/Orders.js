@@ -27,10 +27,8 @@ const orderSchema = mongoose.Schema(
       country: { type: String, requires: true },
     },
     paymentMethod: {
-      id: { type: String },
-      status: { type: String },
-      update_time: { type: String },
-      email_address: { type: String },
+      type: String,
+      required: true,
     },
     taxPrice: {
       type: Number,

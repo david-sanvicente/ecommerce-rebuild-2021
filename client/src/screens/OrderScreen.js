@@ -16,9 +16,11 @@ const OrderScreen = ({ match }) => {
   const dispatch = useDispatch()
   const orderId = match.params.id
   const orderDetails = useSelector((state) => state.orderDetails)
+  // const paymentMethod = useSelector((state) => state.cart.paymentMethod)
   const { order, loading, error } = orderDetails
 
   useEffect(() => {
+    // console.log(orderDetails)
     dispatch(getOrderDetails(orderId))
   }, [dispatch, orderId])
 
@@ -35,6 +37,12 @@ const OrderScreen = ({ match }) => {
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
+                <strong>Name: </strong> {order.user.name}
+              </p>
+              <p>
+                <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
+              </p>
+              <p>
                 <strong>Address: </strong>
                 {order.shippingAddress.address}, {order.shippingAddress.city},
                 {order.shippingAddress.postalCode},{' '}
@@ -44,8 +52,14 @@ const OrderScreen = ({ match }) => {
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {order.paymentMethod}
+              <p>
+                <strong>Method: {order.paymentMethod}</strong>
+              </p>
+              {order.isPaid ? (
+                <Message variant='success'>Paid on {order.paidAt}</Message>
+              ) : (
+                <Message variant='danger'>Not Paid</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
