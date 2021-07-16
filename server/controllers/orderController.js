@@ -34,4 +34,23 @@ const placeOrder = asyncHandler(async (req, res) => {
   }
 })
 
-export { placeOrder }
+const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({})
+  res.json(orders)
+})
+
+const getOrderById = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name email'
+  )
+
+  if (order) {
+    res.json(order)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
+})
+
+export { placeOrder, getOrderById, getAllOrders }

@@ -19,8 +19,6 @@ const App = () => {
       <Header />
       <main className='py-3'>
         <Container>
-          {/* <h1>Welcome to ProShop!</h1> */}
-          {/* <HomeScreen /> */}
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/payment' component={PaymentScreen} />
           <Route path='/shipping' component={ShippingScreen} />
