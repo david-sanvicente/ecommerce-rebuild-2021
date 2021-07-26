@@ -1,10 +1,12 @@
 import express from 'express'
-import asyncHandler from 'express-async-handler'
-import Product from '../models/Products.js'
+// import asyncHandler from 'express-async-handler'
+// import Product from '../models/Products.js'
 import {
   getProducts,
   getProductById,
+  deleteProductById,
 } from '../controllers/productController.js'
+import { protect, admin } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
@@ -18,6 +20,9 @@ router.route('/').get(getProducts)
 // @route GET /api/products/:id
 // @access Public
 // router.get('/:id', getProductById())
-router.route('/:id').get(getProductById)
+router
+  .route('/:id')
+  .get(getProductById)
+  .delete(protect, admin, deleteProductById)
 
 export default router
