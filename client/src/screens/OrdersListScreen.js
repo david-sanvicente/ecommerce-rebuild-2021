@@ -9,7 +9,6 @@ import { getAllOrders } from '../actions/orderActions'
 const OrderListScreen = ({ history }) => {
   const dispatch = useDispatch()
 
-  // const orderList = useSelector((state) => state.orderList)
   const ordersList = useSelector((state) => state.ordersList)
   const { loading, error, orders } = ordersList
 
@@ -23,8 +22,6 @@ const OrderListScreen = ({ history }) => {
       history.push('/login')
     }
   }, [dispatch, history, userInfo])
-
-  console.log(orders)
 
   return (
     <>

@@ -7,6 +7,7 @@ import {
   getOrderById,
   updateOrderPaid,
   getMyOrders,
+  updateOrderDelivered,
 } from '../controllers/orderController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -16,6 +17,6 @@ router.route('/').post(protect, placeOrder).get(protect, admin, getAllOrders)
 router.route('/myorders').get(protect, getMyOrders)
 router.route('/:id').get(protect, getOrderById)
 router.route('/:id/pay').put(protect, updateOrderPaid)
-// router.route('/')
+router.route('/:id/deliver').put(protect, admin, updateOrderDelivered)
 
 export default router
