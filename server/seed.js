@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import users from './data/users.js'
 import products from './data/products.js'
+import guitars from './data/guitars.js'
 import User from './models/Users.js'
 import Product from './models/Products.js'
 import Order from './models/Orders.js'
@@ -19,11 +20,18 @@ const importData = async () => {
 
     const createdUsers = await User.insertMany(users)
     const adminUser = createdUsers[0]._id
-    const sampleProducts = products.map((product) => {
-      return { ...product, user: adminUser }
+
+    const sampleGuitars = guitars.map((guitar) => {
+      return { ...guitar, user: adminUser }
     })
 
-    await Product.insertMany(sampleProducts)
+    await Product.insertMany(sampleGuitars)
+
+    // const sampleProducts = products.map((product) => {
+    //   return { ...product, user: adminUser }
+    // })
+
+    // await Product.insertMany(sampleProducts)
 
     console.log(`Data Imported`.green.inverse)
     process.exit()
