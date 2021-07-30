@@ -7,6 +7,7 @@ import {
   deleteProductById,
   createProduct,
   updateProduct,
+  createProductReview,
 } from '../controllers/productController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -22,6 +23,9 @@ router.route('/').get(getProducts).post(protect, admin, createProduct)
 // @route GET /api/products/:id
 // @access Public
 // router.get('/:id', getProductById())
+
+router.route('/:id/reviews').post(protect, createProductReview)
+
 router
   .route('/:id')
   .get(getProductById)
