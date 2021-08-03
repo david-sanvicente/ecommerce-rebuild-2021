@@ -16,6 +16,12 @@ const ProductCarousel = () => {
     dispatch(listTopProducts())
   }, [dispatch])
 
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  })
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -28,7 +34,7 @@ const ProductCarousel = () => {
             <Image src={product.image} als={product.name} fluid />
             <Carousel.Caption className='carousel-caption'>
               <h2>
-                {product.name} ({product.price})
+                {product.name} ({formatter.format(product.price)})
               </h2>
             </Carousel.Caption>
           </Link>
