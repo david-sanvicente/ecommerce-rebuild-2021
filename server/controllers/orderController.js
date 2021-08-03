@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Order from '../models/Orders.js'
+import Product from '../models/Products.js'
 
 const placeOrder = asyncHandler(async (req, res) => {
   const {
@@ -58,6 +59,13 @@ const updateOrderPaid = asyncHandler(async (req, res) => {
       status: req.body.status,
       update_time: req.body.update_time,
       email_address: req.body.payer.email_address,
+    }
+
+    for (const index in order.orderItems) {
+      const item = order.orderItems[index]
+      const product = await Product.findById(item.product)
+      product.countInStock -= item.qty
+      await product.save()
     }
 
     const updatedOrder = await order.save()
