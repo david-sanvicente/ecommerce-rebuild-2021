@@ -27,12 +27,6 @@ const importData = async () => {
 
     await Product.insertMany(sampleGuitars)
 
-    // const sampleProducts = products.map((product) => {
-    //   return { ...product, user: adminUser }
-    // })
-
-    // await Product.insertMany(sampleProducts)
-
     console.log(`Data Imported`.green.inverse)
     process.exit()
   } catch (error) {

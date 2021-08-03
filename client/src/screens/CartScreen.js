@@ -13,7 +13,6 @@ const CartScreen = ({ match, location, history }) => {
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
-  // console.log('cart items:', cartItems)
 
   useEffect(() => {
     if (productId) {
@@ -98,7 +97,6 @@ const CartScreen = ({ match, location, history }) => {
               <Button
                 type='button'
                 className='w-100'
-                // className='btn-block'
                 disabled={cartItems.length === 0}
                 onClick={checkoutHandler}
               >
