@@ -34,6 +34,7 @@ h2 {
 .carousel-caption {
   position: absolute;
   top: 0;
+  margin: -10px;
 }
 
 .carousel-caption h2 {
@@ -59,8 +60,22 @@ h2 {
   text-decoration: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 667px) {
+  /* .carousel-caption h2 {
+    font-size: 19px;
+  } */
+
+  .search-box {
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 320px) {
   .carousel-caption h2 {
-    /* font-size: 2.5vw; */
+    font-size: 19px;
+  }
+
+  .search-box {
+    margin-top: 13px;
   }
 }

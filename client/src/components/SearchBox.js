@@ -14,7 +14,7 @@ const SearchBox = ({ history }) => {
   }
 
   return (
-    <div className='d-flex justify-content-start'>
+    <div className='search-box d-flex justify-content-start'>
       <Form onSubmit={submitHandler} className='d-flex'>
         <Form.Control
           type='text'
