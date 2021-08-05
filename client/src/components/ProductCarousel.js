@@ -33,10 +33,11 @@ const ProductCarousel = () => {
           <Link to={`/product/${product._id}`}>
             <Image src={product.image} alt={product.name} fluid />
             <Carousel.Caption className='carousel-caption'>
-              <h2>
-                {product.name} ({formatter.format(product.price)})
-              </h2>
+              <h2>{product.name}</h2>
             </Carousel.Caption>
+            <h2 className='carousel-price'>
+              ({formatter.format(product.price)})
+            </h2>
           </Link>
         </Carousel.Item>
       ))}
